@@ -863,7 +863,7 @@ def hybrid_a_star_planning(start, goal, ox, oy, xy_resolution, yaw_resolution):
     # openList: 待探索{索引→Node}，closedList: 已探索{索引→Node}
     openList, closedList = {}, {}
 
-    # 启发函数：DP距离表(2D网格到目标的下界距离)
+    # 启发函数：DP距离表(2D网格到目标的下界距离) ***
     h_dp = calc_distance_heuristic(
         goal_node.x_list[-1], goal_node.y_list[-1],
         ox, oy, xy_resolution, BUBBLE_R)
@@ -998,8 +998,10 @@ def get_final_path(closed, goal_node):
     # 第7-12行：反向遍历搜索树，串联所有轨迹
     while nid:
         # nid是整数索引，>0为True
-        n = closed[nid]
-        # 从closed字典中取出前驱Node
+        n = closed[nid] 
+
+
+        # 从closed字典中取出前驱Nod
         reversed_x.extend(list(reversed(n.x_list)))
         reversed_y.extend(list(reversed(n.y_list)))
         reversed_yaw.extend(list(reversed(n.yaw_list)))
@@ -1015,10 +1017,9 @@ def get_final_path(closed, goal_node):
     reversed_yaw = list(reversed(reversed_yaw))
     direction = list(reversed(direction))
     # 所有轨迹都已反转累积，最后再反转一次恢复正向
-
-    # 第19行：调整起点端的方向
+    # 第19行：调整起点端的方向 
     direction[0] = direction[1]
-    # 起点的direction[0]可能不准确，用direction[1]覆盖
+    # 起点的direction[0]可能不准确，用direction[1]覆盖 ？
 
     path = Path(reversed_x, reversed_y, reversed_yaw, direction, final_cost)
 
@@ -1064,7 +1065,7 @@ def verify_index(node, c):
 
 def calc_index(node, c):
     """
-    将3D网格索引(x_index, y_index, yaw_index)转换为1D线性索引
+    将3D网格索引(x_index, y_index, yaw_index)转换为1D线性索引 ？
     
     目的：用作字典键，快速查找节点
     公式：3D坐标 → 1D线性地址（类似于多维数组的行优先展开）
